@@ -187,3 +187,15 @@ textarea { min-height: 140px; resize: vertical; }
   .wa-float { padding: 12px 16px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
+/* Sketches, drawings and videos in the gallery */
+.gallery figure.contain img { object-fit: contain; background: var(--white); }
+.gallery figure.video { cursor: default; background: transparent; overflow: visible; }
+.gallery figure.video:hover img { transform: none; }
+.gallery figure.video video, .gallery figure.video .yt, .gallery figure.video .yt-frame {
+  display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius); background: #000; object-fit: cover;
+}
+.gallery figure.video .yt { position: relative; background-size: cover; background-position: center; cursor: pointer; padding: 0; }
+.gallery figure.video .yt::after { content: ""; position: absolute; left: 50%; top: 50%; width: 68px; height: 68px; margin: -34px 0 0 -34px; border-radius: 50%; background: rgba(31,26,22,.78) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M9 6.5v11l9-5.5z'/%3E%3C/svg%3E") center / 40px no-repeat; transition: background-color .2s; }
+.gallery figure.video .yt:hover::after { background-color: var(--brass); }
+.gallery figure.video figcaption { position: static; padding: 10px 2px 0; color: var(--ink); background: none; }

@@ -25,6 +25,19 @@
     });
   });
 
+  // YouTube videos load only when played (keeps the page fast on mobile data)
+  document.querySelectorAll(".yt").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + b.getAttribute("data-yt") + "?autoplay=1&rel=0";
+      f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      f.allowFullscreen = true;
+      f.title = b.getAttribute("aria-label");
+      f.className = "yt-frame";
+      b.replaceWith(f);
+    });
+  });
+
   // Lightbox
   var box = document.getElementById("lightbox");
   if (box && items.length) {
@@ -32,6 +45,7 @@
     var cap = box.querySelector("figcaption");
     var close = function () { box.classList.remove("open"); };
     items.forEach(function (it) {
+      if (it.classList.contains("video")) return;
       it.addEventListener("click", function () {
         var src = it.querySelector("img");
         img.src = src.currentSrc || src.src;

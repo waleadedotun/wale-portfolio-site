@@ -1,0 +1,5 @@
+# YouTube videos for the Videos tab. Add one link per line.
+# Optional: put a title after a | symbol. Lines starting with # are ignored.
+#
+# Example (remove the # to use it):
+# https://youtu.be/xxxxxxxxxxx | Fitted kitchen installation
