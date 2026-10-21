@@ -1,0 +1,16 @@
+# Categories for the Portfolio tabs and the Home page.
+# Format:  file-name start(s) | Tab name | Default caption | options
+#   - You can give several file-name starts, separated by commas.
+#   - options (optional): feature = may appear on the Home page; contain = show the whole
+#     picture without cropping (good for sketches and drawings).
+# To add a new category, copy a line, change it, and save. For example, to add
+# "Ceilings" you would add:   ceiling | Ceilings | Ceiling design | feature
+# Then name your photos ceiling-01.jpg, ceiling-02.jpg ...  Tabs appear once a photo exists.
+
+kitchen | Kitchens | Fitted kitchen | feature
+wardrobe | Wardrobes | Fitted wardrobe | feature
+door | Doors | Doors | feature
+furniture | Furniture | Furniture | feature
+tv-console, tvconsole, tv | TV consoles | TV console | feature
+sketch | Hand sketches | Hand sketch | contain
+drawing | Drawings | Design drawing | contain

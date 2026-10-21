@@ -24,14 +24,40 @@ const crypto = require("crypto");
 const ROOT = __dirname;
 const OUT = path.join(ROOT, "dist");
 
-const CATS = [
-  { key: "kitchens", label: "Kitchens", caption: "Fitted kitchen", alt: "Fitted kitchen by Wale Adedotun", re: /^kitchen/i, feature: true },
-  { key: "wardrobes", label: "Wardrobes", caption: "Fitted wardrobe", alt: "Fitted wardrobe by Wale Adedotun", re: /^wardrobe/i, feature: true },
-  { key: "doors", label: "Doors", caption: "Doors", alt: "Door installation by Wale Adedotun", re: /^door/i, feature: true },
-  { key: "furniture", label: "Furniture", caption: "Furniture", alt: "Custom furniture by Wale Adedotun", re: /^furniture/i, feature: true },
-  { key: "sketches", label: "Hand sketches", caption: "Hand sketch", alt: "Hand sketch by Wale Adedotun", re: /^sketch/i, contain: true },
-  { key: "drawings", label: "Drawings", caption: "Design drawing", alt: "Design drawing by Wale Adedotun", re: /^drawing/i, contain: true },
+// Categories come from categories.txt (edit that file to add a new tab).
+// If the file is missing, these built-in ones are used.
+const DEFAULT_CATS = [
+  "kitchen | Kitchens | Fitted kitchen | feature",
+  "wardrobe | Wardrobes | Fitted wardrobe | feature",
+  "door | Doors | Doors | feature",
+  "furniture | Furniture | Furniture | feature",
+  "sketch | Hand sketches | Hand sketch | contain",
+  "drawing | Drawings | Design drawing | contain",
 ];
+const catFile = path.join(ROOT, "categories.txt");
+const catLines = fs.existsSync(catFile)
+  ? fs.readFileSync(catFile, "utf8").split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith("#"))
+  : DEFAULT_CATS;
+const CATS = catLines.map((line) => {
+  const [pre, label, caption, opts = ""] = line.split("|").map((x) => x.trim());
+  const prefixes = pre.split(",").map((x) => x.trim().toLowerCase()).filter(Boolean).sort((a, b) => b.length - a.length);
+  return {
+    key: prefixes[0].replace(/[^a-z0-9]+/g, "-"),
+    label: label || prefixes[0],
+    caption: caption || label,
+    alt: (caption || label) + " by Wale Adedotun",
+    prefixes,
+    feature: /feature/i.test(opts),
+    contain: /contain/i.test(opts),
+  };
+});
+// Which category a file belongs to (the longest matching start wins), and the start that matched.
+function findCat(file) {
+  const f = file.toLowerCase();
+  let best = null;
+  for (const c of CATS) for (const pre of c.prefixes) if (f.startsWith(pre) && (!best || pre.length > best.pre.length)) best = { cat: c, pre };
+  return best;
+}
 const VIDEO_RE = /^video/i;
 
 // The grey "Replace with..." sample pictures supplied with the template.
@@ -65,7 +91,8 @@ const videos = [];
 for (const file of fs.readdirSync(ROOT).sort(natural)) {
   const isImg = IMG.test(file), isVid = VID.test(file);
   if (!isImg && !isVid) continue;
-  const cat = isImg ? CATS.find((c) => c.re.test(file)) : null;
+  const hit = isImg ? findCat(file) : null;
+  const cat = hit ? hit.cat : null;
   if (!cat && !(isVid && VIDEO_RE.test(file))) continue;
   if (DOUBLE_EXT.test(file)) {
     console.log("Skipping " + file + " (two file endings. Rename it, for example to " + file.replace(DOUBLE_EXT, file.match(/\.[a-z0-9]+$/i)[0].replace(/jpeg/i, "jpg")) + ")");
@@ -73,7 +100,7 @@ for (const file of fs.readdirSync(ROOT).sort(natural)) {
   }
   if (isVid) { videos.push({ kind: "file", file, title: titleFrom(file, VIDEO_RE, "Video") }); continue; }
   if (PLACEHOLDERS.has(md5(path.join(ROOT, file)))) continue;
-  photos.push({ file, cat, title: titleFrom(file, cat.re, cat.caption) });
+  photos.push({ file, cat, title: titleFrom(file, new RegExp("^" + hit.pre.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), cat.caption) });
 }
 
 // Show photos grouped by category (kitchens first ... drawings last), then by file name
