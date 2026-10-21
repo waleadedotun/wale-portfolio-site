@@ -15,14 +15,25 @@
   // Gallery filter
   var buttons = document.querySelectorAll(".filters button");
   var items = document.querySelectorAll(".gallery figure");
+  var gal = document.querySelector(".gallery[data-all]");
+  function show(f) {
+    var highlights = gal && gal.getAttribute("data-all") === "highlights";
+    items.forEach(function (it) {
+      if (f === "all") it.hidden = highlights && it.getAttribute("data-hl") !== "1";
+      else it.hidden = it.getAttribute("data-cat") !== f;
+    });
+  }
   buttons.forEach(function (b) {
     b.addEventListener("click", function () {
-      var f = b.getAttribute("data-filter");
       buttons.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-      items.forEach(function (it) {
-        it.hidden = !(f === "all" || it.getAttribute("data-cat") === f);
-      });
+      show(b.getAttribute("data-filter"));
     });
+  });
+  if (gal && buttons.length) show("all");
+
+  // Before / after sliders
+  document.querySelectorAll(".ba-wrap input").forEach(function (r) {
+    r.addEventListener("input", function () { r.parentNode.style.setProperty("--pos", r.value + "%"); });
   });
 
   // YouTube videos load only when played (keeps the page fast on mobile data)
@@ -45,7 +56,7 @@
     var cap = box.querySelector("figcaption");
     var close = function () { box.classList.remove("open"); };
     items.forEach(function (it) {
-      if (it.classList.contains("video")) return;
+      if (it.classList.contains("video") || it.classList.contains("ba")) return;
       it.addEventListener("click", function () {
         var src = it.querySelector("img");
         img.src = src.currentSrc || src.src;

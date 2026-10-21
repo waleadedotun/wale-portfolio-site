@@ -199,3 +199,17 @@ textarea { min-height: 140px; resize: vertical; }
 .gallery figure.video .yt::after { content: ""; position: absolute; left: 50%; top: 50%; width: 68px; height: 68px; margin: -34px 0 0 -34px; border-radius: 50%; background: rgba(31,26,22,.78) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M9 6.5v11l9-5.5z'/%3E%3C/svg%3E") center / 40px no-repeat; transition: background-color .2s; }
 .gallery figure.video .yt:hover::after { background-color: var(--brass); }
 .gallery figure.video figcaption { position: static; padding: 10px 2px 0; color: var(--ink); background: none; }
+
+/* Before / after slider */
+.gallery figure.ba { cursor: default; background: transparent; overflow: visible; }
+.gallery figure.ba:hover img { transform: none; }
+.gallery figure.ba figcaption { position: static; padding: 10px 2px 0; color: var(--ink); background: none; }
+.ba-wrap { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; background: #000; --pos: 50%; touch-action: pan-y; }
+.gallery .ba-wrap img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
+.ba-before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ba-line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 3px; margin-left: -1.5px; background: #fff; box-shadow: 0 0 6px rgba(0,0,0,.5); pointer-events: none; }
+.ba-line::after { content: ""; position: absolute; top: 50%; left: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%233b261b' d='M8 7l-5 5 5 5V7zm8 0v10l5-5-5-5z'/%3E%3C/svg%3E") center / 24px no-repeat; box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+.ba-tag { position: absolute; top: 12px; padding: 4px 11px; border-radius: 999px; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; background: rgba(20,12,8,.72); color: #fff; pointer-events: none; }
+.ba-tag-b { left: 12px; } .ba-tag-a { right: 12px; }
+.ba-wrap input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; opacity: 0; cursor: ew-resize; -webkit-appearance: none; appearance: none; background: none; }
+.ba-wrap:focus-within { outline: 3px solid var(--brass); outline-offset: 3px; }

@@ -1,0 +1,9 @@
+# Choose which picture represents each tab.
+# The "All" tab and the Home page show ONE picture per category. By default it is the first
+# one. To choose a different one, add its file name here, one per line, then save.
+# (You can list as many as you like. Only one per category is used.)
+#
+# Examples (remove the # to use them):
+# kitchen-04.jpg
+# wardrobe-03.jpg
+# before-kitchen-01.jpg
