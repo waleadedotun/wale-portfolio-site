@@ -14,3 +14,4 @@ furniture | Furniture | Furniture | feature
 tv-console, tvconsole, tv | TV consoles | TV console | feature
 sketch | Hand sketches | Hand sketch | contain
 drawing | Drawings | Design drawing | contain
+3d design | 3D Drawings | 3D Drawing | contain
